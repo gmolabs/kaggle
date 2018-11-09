@@ -3,8 +3,9 @@
 https://www.kaggle.com/c/whats-cooking-kernels-only
 
 ## Data wrangling
-- task a
-- task b
+- download and parse (data.py) list of JSON
+- histogram of ingredients (from collections import Counter)
+- count of recipes in each cuisine, count of cuisines
 
 ## Modeling
 - task a
