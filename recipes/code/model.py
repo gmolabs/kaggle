@@ -1,6 +1,5 @@
 from data import make_dataset
 
-train, test = make_dataset('../data/train.json', '../data/test.json')
+train, test = make_dataset()
 
-print(train)
-print(test)
+print(train, test)
