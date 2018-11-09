@@ -13,3 +13,4 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 ## Presentation
 - task a
 - task b
+- task c
