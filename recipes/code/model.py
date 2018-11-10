@@ -17,4 +17,4 @@ ingredientCounter = Counter(total)
 print("~~~~~~~~~~~~~~INGREDIENTS~~~~~~~~~~~~~~~~~~~~~~")
 print("{} ingredients found...".format(len(ingredientCounter)))
 for k, v in ingredientCounter.most_common():
-    print(k, v)
+    print("{}:  {}".format(k, v))
