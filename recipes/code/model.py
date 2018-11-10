@@ -1,5 +1,5 @@
 from data import make_dataset
 
-train, test = make_dataset()
+train, test, validate = make_dataset()
 
-print(train, test)
+print(validate)
