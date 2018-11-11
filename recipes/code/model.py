@@ -1,6 +1,8 @@
 from data import make_dataset
 from collections import Counter
+from sklearn import datasets
 
+ingredientCutoff = 200
 train, test, validate = make_dataset()
 
 #get count of cuisines
@@ -18,3 +20,11 @@ print("~~~~~~~~~~~~~~INGREDIENTS~~~~~~~~~~~~~~~~~~~~~~")
 print("{} ingredients found...".format(len(ingredientCounter)))
 for k, v in ingredientCounter.most_common():
     print("{}:  {}".format(k, v))
+
+print("~~~~~~~~~~~~~~TOP INGREDIENTS~~~~~~~~~~~~~~~~~~~~~~")
+print("Showing the top {} most common ingredients...".format(ingredientCutoff))
+topIngredientsList = list(ingredientCounter.most_common())[:ingredientCutoff]
+for k, v in topIngredientsList:
+    print("{}:  {} uses".format(k, v))
+
+#1hot encode ingredients into recipes

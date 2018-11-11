@@ -9,6 +9,7 @@ def make_dataset(train_path='../data/train.json', test_path='../data/test.json',
     with open(train_path) as trainJSON, open(test_path) as testJSON:
         train = json.load(trainJSON)
         test = json.load(testJSON)
+        #randomize training set
         shuffle(train)
         #create a randomly selected validation set of size "validation_portion percent" of the test set
         validation_length = int(float(len(train))*validation_portion)
