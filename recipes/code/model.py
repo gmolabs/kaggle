@@ -1,6 +1,10 @@
 from data import make_dataset
+from numpy import array
 from collections import Counter
 from sklearn import datasets
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
+
 
 ingredientCutoff = 200
 train, test, validate = make_dataset()
@@ -27,4 +31,18 @@ topIngredientsList = list(ingredientCounter.most_common())[:ingredientCutoff]
 for k, v in topIngredientsList:
     print("{}:  {} uses".format(k, v))
 
-#1hot encode ingredients into recipes
+#prep for one-hot encoding: https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
+#integer encode top ingredients
+ingredientLabels = [item[0] for item in topIngredientsList] #list comprehension to extract labels and leave count
+#print(ingredientLabels)
+label_encoder = LabelEncoder()
+integer_encoded = label_encoder.fit_transform(ingredientLabels)
+#print(integer_encoded)
+#one-hot encode labels
+onehot_encoder = OneHotEncoder(sparse=False)
+integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
+onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
+#print(onehot_encoded)
+
+
+#create recipe vectors of 1hot-encoded ingredients (binary vecs with a 1 at the index of each ingredient)

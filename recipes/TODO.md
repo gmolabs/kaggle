@@ -10,9 +10,9 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 - ~~count of recipes in each cuisine, count of cuisines~~
 
 ## Modeling
-- truncate list to top 20-200 ingredients
-- 1-hot encode ingredients into recipes
-- task b
+- ~~truncate list to top 20-200 ingredients~~
+- ~~1-hot encode ingredients~~
+- take encoded ingredients and reduce into recipe binary vectors
 
 ## Presentation
 - task a
