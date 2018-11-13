@@ -1,2 +1,2 @@
 # kaggle
-kaggle challenges
+AI challenges from https://www.kaggle.com
