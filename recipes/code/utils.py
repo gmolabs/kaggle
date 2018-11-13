@@ -3,5 +3,4 @@ def indexInList(k, lst):
         try:
             return lst.index(k)
         except ValueError:
-            pass
-    return -1
+            return -1

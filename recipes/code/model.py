@@ -30,7 +30,7 @@ ingredientCounter = Counter(total)
 #print("Showing the top {} most common ingredients...".format(ingredientCutoff))
 topIngredientsCount = list(ingredientCounter.most_common())[:ingredientCutoff]
 ingredientNames = list()
-for k, v in topIngredientsCount:
+for k, _ in topIngredientsCount:
 #    print("{}:  {} uses".format(k, v))
     ingredientNames.append(k)
 #print(ingredientNames)
@@ -50,7 +50,12 @@ for recipe in recipes:
     onehotRecipe = [0 for _ in range(ingredientCutoff)]
     for ingredient in recipe:
         i = indexInList(ingredient, ingredientNames)
-        if(i!=-1):
+        if(i>=0):
             onehotRecipe[i] = 1
     onehotRecipes.append(onehotRecipe)
-print(onehotRecipes)
+#print(onehotRecipes)
+
+#zip onehotRecipes with their labels
+cuisineLabels = list(recipe["cuisine"] for recipe in train)
+recipesAndLabels = list(zip(onehotRecipes, cuisineLabels))
+print(recipesAndLabels)
