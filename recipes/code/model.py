@@ -2,6 +2,7 @@ from data import make_dataset
 from numpy import array
 from collections import Counter
 from sklearn import datasets
+from sklearn import svm, metrics
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from utils import indexInList
@@ -55,7 +56,30 @@ for recipe in recipes:
     onehotRecipes.append(onehotRecipe)
 #print(onehotRecipes)
 
-#zip onehotRecipes with their labels
+onehotValidate = list()
+recipes = [recipe['ingredients'] for recipe in validate]
+for recipe in recipes:
+#    print(recipe)
+    onehotVal = [0 for _ in range(ingredientCutoff)]
+    for ingredient in recipe:
+        i = indexInList(ingredient, ingredientNames)
+        if(i>=0):
+            onehotVal[i] = 1
+    onehotValidate.append(onehotVal)
+
+#get labels for classifier
 cuisineLabels = list(recipe["cuisine"] for recipe in train)
-recipesAndLabels = list(zip(onehotRecipes, cuisineLabels))
-print(recipesAndLabels)
+expected = list(recipe["cuisine"] for recipe in validate)
+
+#setup classifier and fit data
+classifier = svm.SVC(gamma='scale')
+classifier.fit(onehotRecipes, cuisineLabels)
+
+#predict cuisine from onehotRecipes
+#print("predition should be:")
+#print(expected)
+predicted = classifier.predict(onehotValidate)
+
+print("Classification report for classifier %s:\n%s\n"
+      % (classifier, metrics.classification_report(expected, predicted)))
+print("Confusion matrix:\n%s" % metrics.confusion_matrix(expected, predicted))

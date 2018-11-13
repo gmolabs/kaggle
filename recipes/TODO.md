@@ -12,6 +12,9 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 ## Modeling
 - ~~truncate list to top 20-200 ingredients~~
 - ~~one-hot encode recipes~~
+- ~~create list of encoded recipes and labels for train data~~
+- ~~run and fit classifier~~
+- print predictions and percent correct
 
 ## Presentation
 - task a
