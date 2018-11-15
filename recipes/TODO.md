@@ -16,7 +16,7 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 - ~~one-hot encode recipes~~
 - ~~create list of encoded recipes and labels for train data~~
 - ~~run and fit classifier~~
-- print predictions and percent correct
+- ~~print predictions and percent correct~~
 - print summary for a portion of training data equivalent in size to the validation set (to better monitor overfitting)
 - find the point at which additional ingredients are no longer helping the model
 - try three different non-neural-net sklearn models to determine what performs best. Each model should be called via a short function in model.py
