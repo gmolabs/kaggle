@@ -20,6 +20,10 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 - print summary for a portion of training data equivalent in size to the validation set (to better monitor overfitting)
 - find the point at which additional ingredients are no longer helping the model
 - try three different non-neural-net sklearn models to determine what performs best. Each model should be called via a short function in model.py
+- modify the sklearn functions to have a save parameter which pickles the model once it's been trained. These models to save should also have probability set to True, to give more interesting info when used in the Presentation tasks.
+- Figure out how to pickle and unpickle one-hot feature encoders, since the model pickling isn't too useful without knowing the associated encoder. One solution is for the models to be passed unencoded data and the parameters with which to encode, then they can create the one-hot encoder and save it alongside the model itself. (One-hot cuisine encoding will be the same every time and can be done from scratch every time.)
+- Write a function which unpickles and returns any of the sklearn models plus an encoder, given a path to a pickled model and a path to an encoder.
+- Write a function which, given an (unpickled) model, an encoder, a list of ingredients (unencoded), returns the model prediction, which should be in a form of a sorted list like `[('Italian', 0.78), ('British', 0.12), ... , ('Indian':0.001)]`
 - (option a) Try an sklearn MLP regressor
 - (option b) Install Tensorflow and get more ToDos
 
