@@ -8,7 +8,7 @@ from sklearn.preprocessing import OneHotEncoder
 from utils import indexInList
 
 
-ingredientCutoff = 20
+ingredientCutoff = 100
 train, test, validate = make_dataset()
 
 #get count of cuisines
@@ -82,4 +82,18 @@ predicted = classifier.predict(onehotValidate)
 
 print("Classification report for classifier %s:\n%s\n"
       % (classifier, metrics.classification_report(expected, predicted)))
-print("Confusion matrix:\n%s" % metrics.confusion_matrix(expected, predicted))
+#print("Confusion matrix:\n%s" % metrics.confusion_matrix(expected, predicted))
+
+correctGuesses = 0;
+for index,prediction in enumerate(predicted):
+    print("Actual/Predicted: {}/{}".format(cuisineLabels[index], prediction))
+    if(cuisineLabels[index]==prediction):
+        correctGuesses+=1
+print("Correct: {}".format(correctGuesses))
+print("Incorrect: {}".format((len(predicted)-correctGuesses)))
+print("Success rate: {}".format(correctGuesses/len(predicted)))
+
+#portion = classifier.predict(onehotPortion)
+#print("Checking portion of train data for overfitting. Report for classifier %s:\n%s\n"
+#      % (classifier, metrics.classification_report(expected, predicted)))
+#print("Confusion matrix:\n%s" % metrics.confusion_matrix(expected, predicted))
