@@ -8,7 +8,7 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 - ~~validate is a randomly selected 10% of train.json, pre-shuffled [validation_portion=0.1 could be another default arg] (see python random library)~~
 - ~~histogram of ingredients (from collections import Counter)~~
 - ~~count of recipes in each cuisine, count of cuisines~~
-- refactor one-hot encoding as function in data.py
+- ~~refactor one-hot encoding as function in data.py~~
 - explore ingredients data to look for low-hanging fruit cleaning (example: are there ingredients that differ only by punctuation or capitalization?)
 
 ## Modeling

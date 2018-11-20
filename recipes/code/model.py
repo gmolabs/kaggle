@@ -1,4 +1,4 @@
-from data import make_dataset
+from data import make_dataset, onehotEncode
 from numpy import array
 from collections import Counter
 from sklearn import datasets
@@ -6,6 +6,7 @@ from sklearn import svm, metrics
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from utils import indexInList
+
 
 
 ingredientCutoff = 100
@@ -44,28 +45,12 @@ for k, _ in topIngredientsCount:
 #	onehotIngredients.append(encodedIngredient)
 #print(onehotIngredients)
 
-onehotRecipes = list()
-recipes = [recipe['ingredients'] for recipe in train]
-for recipe in recipes:
-#    print(recipe)
-    onehotRecipe = [0 for _ in range(ingredientCutoff)]
-    for ingredient in recipe:
-        i = indexInList(ingredient, ingredientNames)
-        if(i>=0):
-            onehotRecipe[i] = 1
-    onehotRecipes.append(onehotRecipe)
-#print(onehotRecipes)
+trainingRecipes = [recipe['ingredients'] for recipe in train]
+onehotTrainingRecipes = onehotEncode(trainingRecipes, ingredientNames)
 
-onehotValidate = list()
-recipes = [recipe['ingredients'] for recipe in validate]
-for recipe in recipes:
-#    print(recipe)
-    onehotVal = [0 for _ in range(ingredientCutoff)]
-    for ingredient in recipe:
-        i = indexInList(ingredient, ingredientNames)
-        if(i>=0):
-            onehotVal[i] = 1
-    onehotValidate.append(onehotVal)
+
+validationRecipes = [recipe['ingredients'] for recipe in validate]
+onehotValidationRecipes = onehotEncode(validationRecipes, ingredientNames)
 
 #get labels for classifier
 cuisineLabels = list(recipe["cuisine"] for recipe in train)
@@ -73,12 +58,12 @@ expected = list(recipe["cuisine"] for recipe in validate)
 
 #setup classifier and fit data
 classifier = svm.SVC(gamma='scale')
-classifier.fit(onehotRecipes, cuisineLabels)
+classifier.fit(onehotTrainingRecipes, cuisineLabels)
 
 #predict cuisine from onehotRecipes
 #print("predition should be:")
 #print(expected)
-predicted = classifier.predict(onehotValidate)
+predicted = classifier.predict(onehotValidationRecipes)
 
 print("Classification report for classifier %s:\n%s\n"
       % (classifier, metrics.classification_report(expected, predicted)))
