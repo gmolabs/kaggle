@@ -9,7 +9,7 @@ from utils import indexInList
 
 
 
-ingredientCutoff = 100
+ingredientCutoff = 400
 train, test, validate = make_dataset()
 
 #get count of cuisines
@@ -23,10 +23,10 @@ train, test, validate = make_dataset()
 total = [recipe['ingredients'] for recipe in train]
 total = [cat for sublist in total for cat in sublist] #flatten the list
 ingredientCounter = Counter(total)
-#print("~~~~~~~~~~~~~~INGREDIENTS~~~~~~~~~~~~~~~~~~~~~~")
-#print("{} ingredients found...".format(len(ingredientCounter)))
-#for k, v in ingredientCounter.most_common():
-#    print("{}:  {}".format(k, v))
+print("~~~~~~~~~~~~~~INGREDIENTS~~~~~~~~~~~~~~~~~~~~~~")
+print("{} ingredients found...".format(len(ingredientCounter)))
+for k, v in ingredientCounter.most_common():
+    print("{}:  {}".format(k, v))
 
 #print("~~~~~~~~~~~~~~TOP INGREDIENTS~~~~~~~~~~~~~~~~~~~~~~")
 #print("Showing the top {} most common ingredients...".format(ingredientCutoff))
@@ -71,8 +71,8 @@ print("Classification report for classifier %s:\n%s\n"
 
 correctGuesses = 0;
 for index,prediction in enumerate(predicted):
-    print("Actual/Predicted: {}/{}".format(cuisineLabels[index], prediction))
-    if(cuisineLabels[index]==prediction):
+    print("Actual/Predicted: {}/{}".format(expected[index], prediction))
+    if(expected[index]==prediction):
         correctGuesses+=1
 print("Correct: {}".format(correctGuesses))
 print("Incorrect: {}".format((len(predicted)-correctGuesses)))
