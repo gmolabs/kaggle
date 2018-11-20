@@ -10,6 +10,7 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 - ~~count of recipes in each cuisine, count of cuisines~~
 - ~~refactor one-hot encoding as function in data.py~~
 - explore ingredients data to look for low-hanging fruit cleaning (example: are there ingredients that differ only by punctuation or capitalization?)
+- add saving and loading of one-hot-encoded data
 
 ## Modeling
 - ~~truncate list to top 20-200 ingredients~~
