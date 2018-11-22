@@ -7,6 +7,7 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 - ~~make_dataset should return train, validate, test~~
 - ~~validate is a randomly selected 10% of train.json, pre-shuffled [validation_portion=0.1 could be another default arg] (see python random library)~~
 - ~~histogram of ingredients (from collections import Counter)~~
+- ~~count of ingredients: 6496...4779 non-unique ingredients~~
 - ~~count of recipes in each cuisine, count of cuisines~~
 - ~~refactor one-hot encoding as function in data.py~~
 - explore ingredients data to look for low-hanging fruit cleaning (example: are there ingredients that differ only by punctuation or capitalization?)
@@ -54,7 +55,7 @@ Success rate: 0.6884586371636913
 
 
 
-- modify the sklearn functions to have a save parameter which pickles the model once it's been trained. These models to save should also have probability set to True, to give more interesting info when used in the Presentation tasks.
+
 - Figure out how to pickle and unpickle one-hot feature encoders, since the model pickling isn't too useful without knowing the associated encoder. One solution is for the models to be passed unencoded data and the parameters with which to encode, then they can create the one-hot encoder and save it alongside the model itself. (One-hot cuisine encoding will be the same every time and can be done from scratch every time.)
 - Write a function which unpickles and returns any of the sklearn models plus an encoder, given a path to a pickled model and a path to an encoder.
 - Write a function which, given an (unpickled) model, an encoder, a list of ingredients (unencoded), returns the model prediction, which should be in a form of a sorted list like `[('Italian', 0.78), ('British', 0.12), ... , ('Indian':0.001)]`
@@ -65,3 +66,6 @@ Success rate: 0.6884586371636913
 - task a
 - task b
 - task c
+
+## Feature Closet
+- modify the sklearn functions to have a save parameter which pickles the model once it's been trained. These models to save should also have probability set to True, to give more interesting info when used in the Presentation tasks.

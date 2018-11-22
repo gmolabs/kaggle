@@ -5,6 +5,8 @@ from sklearn import datasets
 from sklearn import svm, metrics
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.externals import joblib
+#personal utilities
 from utils import indexInList
 #classifiers
 from sklearn.neural_network import MLPClassifier
@@ -19,7 +21,8 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 
 classifierIndex = 12
 
-ingredientCutoff = 400
+ingredientCutoff = 20 #6496 unique ingredients, 4779 non-unique ingredients
+
 train, test, validate = make_dataset()
 
 names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Scale SVC" "Gaussian Process",
@@ -47,7 +50,9 @@ total = [recipe['ingredients'] for recipe in train]
 total = [cat for sublist in total for cat in sublist] #flatten the list
 ingredientCounter = Counter(total)
 #print("~~~~~~~~~~~~~~INGREDIENTS~~~~~~~~~~~~~~~~~~~~~~")
-#print("{} ingredients found...".format(len(ingredientCounter)))
+print("{} ingredients found...".format(len(ingredientCounter)))
+#ingredientCounter = {k:v for k,v in ingredientCounter.iteritems() if v > 1}
+#print("{} non-unique ingredients found...".format(len(ingredientCounter)))
 #for k, v in ingredientCounter.most_common():
 #    print("{}:  {}".format(k, v))
 
@@ -55,10 +60,13 @@ ingredientCounter = Counter(total)
 #print("Showing the top {} most common ingredients...".format(ingredientCutoff))
 topIngredientsCount = list(ingredientCounter.most_common())[:ingredientCutoff]
 ingredientNames = list()
-for k, _ in topIngredientsCount:
+for k, i in topIngredientsCount:
 #    print("{}:  {} uses".format(k, v))
-    ingredientNames.append(k)
-#print(ingredientNames)
+    #exclude unique items
+    if(i>1):
+        ingredientNames.append(k)
+print("{} non-unique ingredients".format(len(ingredientNames)))
+#4779 non-unique ingredients
 
 
 
@@ -93,8 +101,15 @@ expected = list(recipe["cuisine"] for recipe in validate)
 
 #setup classifier and fit data
 #classifier = svm.SVC(gamma='scale')
-classifier = classifiers[classifierIndex]
-classifier.fit(onehotTrainingRecipes, cuisineLabels)
+
+#classifier = classifiers[classifierIndex]
+#classifier.fit(onehotTrainingRecipes, cuisineLabels)
+
+#save model to file
+#joblib.dump(classifier, 'pickledClassifier.joblib');
+
+#load pickled classifiers
+classifier = joblib.load('pickledClassifier.joblib')
 
 #predict cuisine from onehotRecipes
 #print("predition should be:")
