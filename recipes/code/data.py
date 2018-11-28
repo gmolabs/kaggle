@@ -2,6 +2,9 @@ import json
 from random import shuffle
 from math import floor
 from utils import indexInList
+from sklearn.externals import joblib
+from collections import Counter
+
 
 
 # Dataset Preparation
@@ -28,7 +31,7 @@ def make_dataset(train_path='../data/train.json', test_path='../data/test.json',
 #labels: labels for each encoded item (ingredients labels)
 
 def onehotEncode(source, labels):
-    print('Onehot encode source data')
+    print('Onehot encode source data...')
     encoded = list()
     for elem in source:
     #    print(recipe)
@@ -39,3 +42,23 @@ def onehotEncode(source, labels):
                 binaryVec[i] = 1
         encoded.append(binaryVec)
     return encoded
+
+
+def onehotPickle(recipesToPickle, labels, dest):
+    encoded = onehotEncode(recipesToPickle, labels)
+    joblib.dump(encoded, dest)
+    return encoded
+
+
+def getIngredientLabels(dataset, cutoff):
+    total = [recipe['ingredients'] for recipe in dataset]
+    total = [cat for sublist in total for cat in sublist] #flatten the list
+    ingredientCounter = Counter(total)
+    topIngredientsCount = list(ingredientCounter.most_common())[:cutoff]
+    ingredientLabels = list()
+    for k, i in topIngredientsCount:
+    #    print("{}:  {} uses".format(k, v))
+        #exclude unique items
+        if(i>1):
+            ingredientLabels.append(k)
+    return ingredientLabels
