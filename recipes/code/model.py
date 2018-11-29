@@ -25,8 +25,8 @@ from sklearn.datasets import make_classification
 from sklearn.multioutput import MultiOutputClassifier
 
 
-classifierIndex = 3
-ingredientCutoff = 400 #6496 unique ingredients, 4779 non-unique ingredients
+classifierIndex = 7
+ingredientCutoff = 1000 #6496 unique ingredients, 4779 non-unique ingredients
 
 names = ["Nearest_Neighbors", "Linear_SVM", "RBF_SVM", "Scale_SVC", "Gaussia_Process",
          "Decision_Tree", "Random_Forest", "MLP_Classifier", "AdaBoost",
@@ -110,8 +110,8 @@ m = trainModel()
 validateModel(m, validate)
 #recipesToPredict = [recipe['ingredients'] for recipe in validate[0]]
 
-#predictionRecipe = [["tortilla", "ground beef", "cheddar cheese", "oil", "cumin", "salt", "serrano chiles", "sour cream", "cilantro"]]
-predictionRecipe = [["eggplant", "cumin", "ginger", "onion"]]
+predictionRecipe = [["tortilla", "ground beef", "cheddar cheese", "oil", "cumin", "salt", "serrano chiles", "sour cream", "cilantro"]]
+#predictionRecipe = [["eggplant", "cumin", "ginger", "onion"]]
 print("Possible cuisines: {}".format(cuisineLabels))
 predicted_cuisine = predictCuisine(m, predictionRecipe)
 results = list()

@@ -21,7 +21,7 @@ https://www.kaggle.com/c/whats-cooking-kernels-only
 - ~~print predictions and percent correct~~
 - print summary for training data (to better monitor overfitting)
 - ~~find the point at which additional ingredients are no longer helping the model (400 ingredients: 66.6 correct, 800: 64% 2000: 66.7, 200: .612) 400 seems to be the sweet spot~~
-- ~~try three different non-neural-net sklearn models to determine what performs best. Each model should be called via a short function in model.py
+- ~~try three different non-neural-net sklearn models to determine what performs best. Each model should be called via a short function in model.py~~
 
 linear kernal svc: Correct: 2611
 Incorrect: 1366
@@ -50,7 +50,7 @@ Success rate: 0.6447070656273574
 GradientBoostingClassifierTuned:
 Correct: 2738
 Incorrect: 1239
-Success rate: 0.6884586371636913~~
+Success rate: 0.6884586371636913
 
 - ~~Write a function which, given an (unpickled) model, an encoder, a list of ingredients (unencoded), returns the model prediction, which should be in a form of a sorted list like `[('Italian', 0.78), ('British', 0.12), ... , ('Indian':0.001)]`~~
 - (option a) Try an sklearn MLP regressor
