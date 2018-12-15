@@ -5,9 +5,11 @@ from utils import indexInList
 from sklearn.externals import joblib
 from collections import Counter
 from numpy import array
+from keras.utils import to_categorical
+
 # Dataset Preparation
 #return tuples of numpy arrays for train, test: ([x_train, y_train]),  ([x_test, y_test])
-def loadData(ingredientSkip=0, ingredientCutoff=10000, train_path='../data/train.json', test_path='../data/test.json', validation_portion=0.1):
+def loadData(ingredientSkip=0, ingredientCutoff=1000, train_path='../data/train.json', test_path='../data/test.json', validation_portion=0.1):
     with open(train_path) as trainJSON, open(test_path) as testJSON:
         train = json.load(trainJSON)
         #randomize training set
@@ -20,16 +22,27 @@ def loadData(ingredientSkip=0, ingredientCutoff=10000, train_path='../data/train
         encodedRecipes = onehotEncode(recipes, ingredients)
         #get labels for recipes
         labels = list(recipe["cuisine"] for recipe in train)
+        cuisines = set(labels)
+        print(cuisines)
+        print(len(cuisines))
+        #turn cuisines back into a list for onehotEncoding
+        cuisines = list(cuisines)
+        #convert cuisine names (strings) to index (int) in cuisines set
+        encodedLabels = onehotCuisineEncode(labels, cuisines)
         #split around validation_length as index
         validation_length = int(float(len(train))*validation_portion)
         x_train = array(encodedRecipes[validation_length:])
-        y_train = array(labels[validation_length:])
+        y_train = array(encodedLabels[validation_length:])
         x_test = array(encodedRecipes[:validation_length])
-        y_test = array(labels[:validation_length])
+        y_test = array(encodedLabels[:validation_length])
         return((x_train, y_train), (x_test, y_test))
 
 
-
+def encodeLabels(labels, cuisines):
+    encoded = list()
+    for l in labels:
+        encoded.append(indexInList(l, cuisines))
+    return encoded
 
 # Takes train and test paths, returns two lists
 def make_dataset(train_path='../data/train.json', test_path='../data/test.json', validation_portion=0.1):
@@ -54,8 +67,23 @@ def make_dataset(train_path='../data/train.json', test_path='../data/test.json',
 #source: a list of lists (list of recipes)
 #labels: labels for each encoded item (ingredients labels)
 
+
 def onehotEncode(source, labels):
     print('Onehot encode source data...')
+    encoded = list()
+    for elem in source:
+    #    print(recipe)
+        binaryVec = [0 for _ in range(len(labels))]
+        for item in elem:
+            i = indexInList(item, labels)
+            if(i>=0):
+                binaryVec[i] = 1
+        encoded.append(binaryVec)
+    return encoded
+
+
+def onehotEncodeRecipes(source, labels):
+    print('Onehot encode recipes data...')
     encoded = list()
     for elem in source:
     #    print(recipe)
@@ -81,7 +109,19 @@ def getIngredientLabels(dataset, cutoff):
     topIngredientsCount = list(ingredientCounter.most_common())[:cutoff]
     ingredientLabels = list()
     for k, i in topIngredientsCount:
-    #    print("{}:  {} uses".format(k, v))
+        #exclude unique items
+        if(i>1):
+            ingredientLabels.append(k)
+    return ingredientLabels
+
+
+def getIngredients(dataset, cutoff):
+    total = [recipe['ingredients'] for recipe in dataset]
+    total = [cat for sublist in total for cat in sublist] #flatten the list
+    ingredientCounter = Counter(total)
+    topIngredientsCount = list(ingredientCounter.most_common())[:cutoff]
+    ingredientLabels = list()
+    for k, i in topIngredientsCount:
         #exclude unique items
         if(i>1):
             ingredientLabels.append(k)
