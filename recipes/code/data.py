@@ -4,10 +4,33 @@ from math import floor
 from utils import indexInList
 from sklearn.externals import joblib
 from collections import Counter
-
-
-
+from numpy import array
 # Dataset Preparation
+#return tuples of numpy arrays for train, test: ([x_train, y_train]),  ([x_test, y_test])
+def loadData(ingredientSkip=0, ingredientCutoff=10000, train_path='../data/train.json', test_path='../data/test.json', validation_portion=0.1):
+    with open(train_path) as trainJSON, open(test_path) as testJSON:
+        train = json.load(trainJSON)
+        #randomize training set
+        shuffle(train)
+        #get ingredients as a list of strings
+        ingredients = getIngredientLabels(train, ingredientCutoff)
+        #create list of recipes to encode
+        recipes = [recipe['ingredients'] for recipe in train]
+        #encode recipes
+        encodedRecipes = onehotEncode(recipes, ingredients)
+        #get labels for recipes
+        labels = list(recipe["cuisine"] for recipe in train)
+        #split around validation_length as index
+        validation_length = int(float(len(train))*validation_portion)
+        x_train = array(encodedRecipes[validation_length:])
+        y_train = array(labels[validation_length:])
+        x_test = array(encodedRecipes[:validation_length])
+        y_test = array(labels[:validation_length])
+        return((x_train, y_train), (x_test, y_test))
+
+
+
+
 # Takes train and test paths, returns two lists
 def make_dataset(train_path='../data/train.json', test_path='../data/test.json', validation_portion=0.1):
     print ('Make Dataset from JSON ... ')
@@ -22,6 +45,7 @@ def make_dataset(train_path='../data/train.json', test_path='../data/test.json',
         validate = validate[:validation_length]
         train = train[validation_length:]
         return train, test, validate
+
 
 #the following function returns a list of vectors, each of which represents a recipe with ingredients one-hot encoded.
 #example return value with two elems in source, 6 items recognized

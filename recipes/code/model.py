@@ -1,3 +1,6 @@
+#personal utilities
+from utils import indexInList
+#from data
 from data import make_dataset, onehotEncode, onehotPickle, getIngredientLabels
 #from numpy import array
 from sklearn import datasets
@@ -7,8 +10,6 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.externals import joblib
 from collections import Counter
 
-#personal utilities
-from utils import indexInList
 #classifiers
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
