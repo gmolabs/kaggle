@@ -18,6 +18,8 @@ VALIDATION_PORTION = .1
 print(keras.__version__)
 
 le = preprocessing.LabelEncoder()
+recipes = []
+
 x_train = []
 y_train = []
 x_test = []
@@ -43,26 +45,27 @@ with open('../data/train.json') as dataJSON:
     x_test = np.array(encodedRecipes[:validation_length])
     y_test = np.array(labels[:validation_length])
 
-print("Building Sequential Model...")
-
 model = keras.Sequential([
     keras.layers.Dense(128, activation=tf.nn.relu),
     keras.layers.Dense(20, activation=tf.nn.softmax) #there are 20 cuisines, final category
 ])
 
-print("Compiling model...")
-
 model.compile(optimizer=tf.train.AdamOptimizer(),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-print("Fitting model...")
-
-
-print("labels shape: {}".format(labels.shape))
-print("x_train shape: {}".format(x_train.shape))
-print("y_train shape: {}".format(y_train.shape))
-print("x_test shape: {}".format(x_test.shape))
-print("y_test shape: {}".format(y_test.shape))
 
 model.fit(x_train, y_train, epochs=5, batch_size=32)
+
+test_loss, test_acc = model.evaluate(x_test, y_test)
+
+print('Test accuracy:', test_acc)
+
+predictions = model.predict(x_test)
+
+print("Ingredients for first recipe: {}".format(recipes[0]))
+
+print("Predictions for first recipe: {}".format(predictions[0]))
+
+print("Predicted cuisine: {}".format(le.classes_[np.argmax(predictions[0])]))
+print("Actual cuisine: {}".format(le.classes_[y_test[0]]))
