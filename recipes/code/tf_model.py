@@ -43,10 +43,10 @@ with open('../data/train.json') as dataJSON:
 
     x_train = np.array(encodedRecipes[test_length:])
     y_train = np.array(labels[test_length:])
-    x_test = np.array(encodedRecipes[validation_length:test_length])
-    y_test = np.array(labels[validation_length:test_length])
-    x_validation = np.array(encodedRecipes[:validation_length])
-    y_validation = np.array(labels[:validation_length])
+    x_validation = np.array(encodedRecipes[validation_length:test_length])
+    y_validation = np.array(labels[validation_length:test_length])
+    x_test = np.array(encodedRecipes[:validation_length])
+    y_test = np.array(labels[:validation_length])
 
 model = keras.Sequential([
     keras.layers.Dense(128, activation=tf.nn.relu),
@@ -58,7 +58,7 @@ model.compile(optimizer=tf.train.AdamOptimizer(),
               metrics=['accuracy'])
 
 
-model.fit(x_train, y_train, validation_data=(x_validation, y_validation),epochs=10, batch_size=32)
+model.fit(x_train, y_train, validation_data=(x_validation, y_validation), epochs=3, batch_size=32)
 
 test_loss, test_acc = model.evaluate(x_test, y_test)
 
@@ -79,6 +79,8 @@ for j, recipe in enumerate(recipes):
         if(confidence>=0.1):
             print("{}: {:.1f}%".format(le.classes_[i], confidence))
     print("Predicted cuisine: {}: {:.1f}%".format(le.classes_[np.argmax(predictions[j])], 100.*predictions[j][np.argmax(predictions[j])]))
-    #print("Actual cuisine: {}".format(le.classes_[y_test[j]]))
-    print("Actual cuisine: {}".format(recipe["cuisine"]))
+    print("Actual cuisine: {}".format(le.classes_[y_test[j]]))
+    print("actual cuisine index: {}".format(y_test[j]))
+    print(le.classes_)
+
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
