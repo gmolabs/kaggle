@@ -39,10 +39,14 @@ with open('../data/train.json') as dataJSON:
     #print(le.inverse_transform([1]))
     encodedRecipes = onehotEncodeRecipes(recipes, ingredients)
     validation_length = int(float(len(data))*VALIDATION_PORTION)
-    x_train = np.array(encodedRecipes[validation_length:])
-    y_train = np.array(labels[validation_length:])
-    x_test = np.array(encodedRecipes[:validation_length])
-    y_test = np.array(labels[:validation_length])
+    test_length = 2*int(float(len(data))*VALIDATION_PORTION)
+
+    x_train = np.array(encodedRecipes[test_length:])
+    y_train = np.array(labels[test_length:])
+    x_test = np.array(encodedRecipes[validation_length:test_length])
+    y_test = np.array(labels[validation_length:test_length])
+    x_validation = np.array(encodedRecipes[:validation_length])
+    y_validation = np.array(labels[:validation_length])
 
 model = keras.Sequential([
     keras.layers.Dense(128, activation=tf.nn.relu),
@@ -54,21 +58,27 @@ model.compile(optimizer=tf.train.AdamOptimizer(),
               metrics=['accuracy'])
 
 
-model.fit(x_train, y_train, epochs=5, batch_size=32)
+model.fit(x_train, y_train, validation_data=(x_validation, y_validation),epochs=10, batch_size=32)
 
 test_loss, test_acc = model.evaluate(x_test, y_test)
 
 print('Test accuracy:', test_acc)
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
 
 predictions = model.predict(x_test)
 
-print("Ingredients for first recipe: {}".format(recipes[0]))
+for j, recipe in enumerate(recipes):
+    if j>=20:
+        break
+    print("Ingredients: {}".format(recipes[j]))
 
-print("Predictions for first recipe:")
-for i, p in enumerate(predictions[0]):
-    confidence = float(p*100.)
-    if(confidence>=0.1):
-        print("{}: {:.1f}%".format(le.classes_[i], confidence))
-print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-print("Predicted cuisine: {}: {:.1f}%".format(le.classes_[np.argmax(predictions[0])], 100.*predictions[0][np.argmax(predictions[0])]))
-print("Actual cuisine: {}".format(le.classes_[y_test[0]]))
+    print("Predictions:")
+    for i, p in enumerate(predictions[j]):
+        confidence = float(p*100.)
+        if(confidence>=0.1):
+            print("{}: {:.1f}%".format(le.classes_[i], confidence))
+    print("Predicted cuisine: {}: {:.1f}%".format(le.classes_[np.argmax(predictions[j])], 100.*predictions[j][np.argmax(predictions[j])]))
+    #print("Actual cuisine: {}".format(le.classes_[y_test[j]]))
+    print("Actual cuisine: {}".format(recipe["cuisine"]))
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
