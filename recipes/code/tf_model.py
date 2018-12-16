@@ -31,17 +31,17 @@ with open('../data/train.json') as dataJSON:
     shuffle(data)
     recipes = [recipe['ingredients'] for recipe in data]
     labels = le.fit_transform([recipe["cuisine"] for recipe in data])
+    print(labels)
     #labels = labels.reshape(len(labels), 1) #doesn't seem to change output of to_categorical
-    encodedLabels = to_categorical(labels)
-    print(encodedLabels)
+    #encodedLabels = to_categorical(labels)
     ingredients = getIngredients(data, INGREDIENT_CUTOFF)
     #print(le.inverse_transform([1]))
     encodedRecipes = onehotEncodeRecipes(recipes, ingredients)
     validation_length = int(float(len(data))*VALIDATION_PORTION)
     x_train = np.array(encodedRecipes[validation_length:])
-    y_train = np.array(encodedLabels[validation_length:])
+    y_train = np.array(labels[validation_length:])
     x_test = np.array(encodedRecipes[:validation_length])
-    y_test = np.array(encodedLabels[:validation_length])
+    y_test = np.array(labels[:validation_length])
 
 print("Building Sequential Model...")
 
@@ -59,7 +59,7 @@ model.compile(optimizer=tf.train.AdamOptimizer(),
 print("Fitting model...")
 
 
-print("labels shape: {}".format(encodedLabels.shape))
+print("labels shape: {}".format(labels.shape))
 print("x_train shape: {}".format(x_train.shape))
 print("y_train shape: {}".format(y_train.shape))
 print("x_test shape: {}".format(x_test.shape))
