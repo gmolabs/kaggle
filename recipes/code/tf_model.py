@@ -15,7 +15,7 @@ from data import getIngredients, onehotEncodeRecipes
 INGREDIENT_CUTOFF = 1000
 VALIDATION_PORTION = .1
 
-print(keras.__version__)
+#print(keras.__version__)
 
 le = preprocessing.LabelEncoder()
 recipes = []
@@ -33,7 +33,6 @@ with open('../data/train.json') as dataJSON:
     shuffle(data)
     recipes = [recipe['ingredients'] for recipe in data]
     labels = le.fit_transform([recipe["cuisine"] for recipe in data])
-    print(labels)
     #labels = labels.reshape(len(labels), 1) #doesn't seem to change output of to_categorical
     #encodedLabels = to_categorical(labels)
     ingredients = getIngredients(data, INGREDIENT_CUTOFF)
@@ -65,7 +64,11 @@ predictions = model.predict(x_test)
 
 print("Ingredients for first recipe: {}".format(recipes[0]))
 
-print("Predictions for first recipe: {}".format(predictions[0]))
-
-print("Predicted cuisine: {}".format(le.classes_[np.argmax(predictions[0])]))
+print("Predictions for first recipe:")
+for i, p in enumerate(predictions[0]):
+    confidence = float(p*100.)
+    if(confidence>=0.1):
+        print("{}: {:.1f}%".format(le.classes_[i], confidence))
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+print("Predicted cuisine: {}: {:.1f}%".format(le.classes_[np.argmax(predictions[0])], 100.*predictions[0][np.argmax(predictions[0])]))
 print("Actual cuisine: {}".format(le.classes_[y_test[0]]))

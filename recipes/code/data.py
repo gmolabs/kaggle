@@ -69,7 +69,7 @@ def make_dataset(train_path='../data/train.json', test_path='../data/test.json',
 
 
 def onehotEncode(source, labels):
-    print('Onehot encode source data...')
+    #print('Onehot encode source data...')
     encoded = list()
     for elem in source:
     #    print(recipe)
@@ -83,7 +83,7 @@ def onehotEncode(source, labels):
 
 
 def onehotEncodeRecipes(source, labels):
-    print('Onehot encode recipes data...')
+    #print('Onehot encode recipes data...')
     encoded = list()
     for elem in source:
     #    print(recipe)
