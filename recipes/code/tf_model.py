@@ -10,9 +10,10 @@ import numpy as np
 from numpy import array
 from random import shuffle
 from data import getIngredients, onehotEncodeRecipes
+from data_utils import preprocess_recipe
 
 #CONSTANTS
-INGREDIENT_CUTOFF = 1000
+INGREDIENT_CUTOFF = 4955 # 10093
 VALIDATION_PORTION = .1
 
 #print(keras.__version__)
@@ -31,6 +32,8 @@ print("Loading Data...")
 with open('../data/train.json') as dataJSON:
     data = json.load(dataJSON)
     shuffle(data)
+    # for recipe in data:
+    #     recipe['ingredients'] = preprocess_recipe(recipe['ingredients'])
     recipes = [recipe['ingredients'] for recipe in data]
     labels = le.fit_transform([recipe["cuisine"] for recipe in data])
     #labels = labels.reshape(len(labels), 1) #doesn't seem to change output of to_categorical
@@ -48,10 +51,13 @@ with open('../data/train.json') as dataJSON:
     x_test = np.array(encodedRecipes[:validation_length])
     y_test = np.array(labels[:validation_length])
 
-model = keras.Sequential([
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(20, activation=tf.nn.softmax) #there are 20 cuisines, final category
-])
+model = keras.Sequential()
+
+model.add(keras.layers.Dense(512, input_dim=INGREDIENT_CUTOFF))
+model.add(keras.layers.Activation('relu'))
+model.add(keras.layers.Dropout(0.7))
+model.add(keras.layers.Dense(20))
+model.add(keras.layers.Activation('softmax'))
 
 model.compile(optimizer=tf.train.AdamOptimizer(),
               loss='sparse_categorical_crossentropy',
@@ -69,7 +75,7 @@ print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 predictions = model.predict(x_test)
 
 for j, recipe in enumerate(recipes):
-    if j>=20:
+    if j>=0:
         break
     print("Ingredients: {}".format(recipes[j]))
 
