@@ -115,11 +115,11 @@ def getIngredientLabels(dataset, cutoff):
     return ingredientLabels
 
 
-def getIngredients(dataset, cutoff):
+def getIngredients(dataset, skip, cutoff):
     total = [recipe['ingredients'] for recipe in dataset]
     total = [cat for sublist in total for cat in sublist] #flatten the list
     ingredientCounter = Counter(total)
-    topIngredientsCount = list(ingredientCounter.most_common())[:cutoff]
+    topIngredientsCount = list(ingredientCounter.most_common())[skip:cutoff]
     ingredientLabels = list()
     for k, i in topIngredientsCount:
         #exclude unique items
