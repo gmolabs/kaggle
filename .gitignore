@@ -1,3 +1,4 @@
 *.pyc
 venv/
 recipes/code/models
+recipes/code/tf_models
