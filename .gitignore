@@ -2,3 +2,4 @@
 venv/
 recipes/code/models
 recipes/code/tf_models
+recipes/code/tfjs_models
