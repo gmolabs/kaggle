@@ -10,6 +10,13 @@ import numpy as np
 from numpy import array
 from random import shuffle
 from data import getIngredients, onehotEncodeRecipes
+import re
+
+def preprocess_recipe(recipe):
+    recipe = [ingredient.lower() for ingredient in recipe]
+    recipe = [re.sub(r'-', ' ',   ingredient)  for ingredient in recipe]
+    recipe = [re.sub(r'[^a-zA-Z0-9 ]', '',   ingredient)  for ingredient in recipe]
+    return recipe
 
 #CONSTANTS
 
@@ -17,9 +24,9 @@ INGREDIENT_CUTOFF = 10000
 INGREDIENT_SKIP = 0
 VALIDATION_PORTION = .1
 N_RECIPES_TO_GUESS = 1
-N_EPOCHS = 3
+N_EPOCHS = 10
 BATCH_SIZE = 32
-DROPOUT_RATE = .8
+DROPOUT_RATE = .9
 N_HIDDEN_SIZE = 1028
 MIN_OCCURENCES = 1 #minimum number of times an ingredient must appear to be included
 
