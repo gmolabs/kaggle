@@ -1,0 +1,1 @@
+tensorflowjs_converter --input_format keras tf_models/model_expert.h5 tfjs_models/
