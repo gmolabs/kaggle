@@ -7,6 +7,8 @@ from collections import Counter
 from numpy import array
 from keras.utils import to_categorical
 
+outputfilename = "../data/ingredients.json"
+
 def onehotEncodeRecipes(source, labels):
     #print('Onehot encode recipes data...')
     encoded = list()
@@ -30,4 +32,7 @@ def getIngredients(dataset, skip, cutoff, min_occurences):
         #exclude unique items
         if(i>min_occurences):
             ingredientLabels.append(k)
+
+    with open(outputfilename, 'w') as outfile:
+        json.dump(ingredientLabels, outfile)
     return ingredientLabels

@@ -24,11 +24,13 @@ INGREDIENT_CUTOFF = 10000
 INGREDIENT_SKIP = 0
 VALIDATION_PORTION = .1
 N_RECIPES_TO_GUESS = 1
-N_EPOCHS = 10
+N_EPOCHS = 1
 BATCH_SIZE = 32
 DROPOUT_RATE = .9
 N_HIDDEN_SIZE = 1028
 MIN_OCCURENCES = 1 #minimum number of times an ingredient must appear to be included
+
+outputfilename = "../data/validation.json"
 
 #print(keras.__version__)
 print("*** CONSTANTS:")
@@ -39,6 +41,8 @@ print("****** Epochs: {}".format(N_EPOCHS))
 print("****** Batch Size: {}".format(BATCH_SIZE))
 print("****** Dropout rate: {}".format(DROPOUT_RATE))
 print("****** Hidden Layer Size: {}".format(N_HIDDEN_SIZE))
+
+
 
 le = preprocessing.LabelEncoder()
 recipes = []
@@ -63,6 +67,8 @@ with open('../data/train.json') as dataJSON:
     validation_length = int(float(len(data))*VALIDATION_PORTION)
     test_length = 2*int(float(len(data))*VALIDATION_PORTION)
 
+    print("Cuisines: {}".format(le.classes_))
+
     x_train = np.array(encodedRecipes[test_length:])
     y_train = np.array(labels[test_length:])
     x_validation = np.array(encodedRecipes[validation_length:test_length])
@@ -70,6 +76,8 @@ with open('../data/train.json') as dataJSON:
     x_test = np.array(encodedRecipes[:validation_length])
     y_test = np.array(labels[:validation_length])
 
+with open(outputfilename, 'w') as outfile:
+    json.dump(data[validation_length:test_length], outfile)
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(N_HIDDEN_SIZE, activation=tf.nn.relu, input_shape=x_train[0].shape))
