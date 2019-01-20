@@ -31,6 +31,8 @@ N_HIDDEN_SIZE = 1028
 MIN_OCCURENCES = 1 #minimum number of times an ingredient must appear to be included
 
 outputfilename = "../data/validation.json"
+cuisine_filename = "../data/cuisines.json"
+
 
 #print(keras.__version__)
 print("*** CONSTANTS:")
@@ -45,6 +47,7 @@ print("****** Hidden Layer Size: {}".format(N_HIDDEN_SIZE))
 
 
 le = preprocessing.LabelEncoder()
+labels = ""
 recipes = []
 
 x_train = []
@@ -78,6 +81,9 @@ with open('../data/train.json') as dataJSON:
 
 with open(outputfilename, 'w') as outfile:
     json.dump(data[validation_length:test_length], outfile)
+
+with open(cuisine_filename, 'w') as outfile:
+    json.dump(list(le.classes_), outfile)
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(N_HIDDEN_SIZE, activation=tf.nn.relu, input_shape=x_train[0].shape))
