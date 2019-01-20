@@ -24,7 +24,7 @@ INGREDIENT_CUTOFF = 10000
 INGREDIENT_SKIP = 0
 VALIDATION_PORTION = .1
 N_RECIPES_TO_GUESS = 1
-N_EPOCHS = 1
+N_EPOCHS = 10
 BATCH_SIZE = 32
 DROPOUT_RATE = .9
 N_HIDDEN_SIZE = 1028
@@ -57,7 +57,7 @@ y_test = []
 print("Loading Data...")
 
 #prepare data for model
-with open('../data/train.json') as dataJSON:
+with open('../data/train_balanced.json') as dataJSON:
     data = json.load(dataJSON)
     shuffle(data)
     recipes = [recipe['ingredients'] for recipe in data]

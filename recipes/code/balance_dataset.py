@@ -5,7 +5,7 @@ from utils import indexInList
 from collections import Counter
 from numpy import array
 
-with open('../data/validation.json') as data_file:
+with open('../data/train.json') as data_file:
     print("balancing dataset")
     output =[]
     data = json.load(data_file)
@@ -26,5 +26,5 @@ with open('../data/validation.json') as data_file:
         del(cuisine[:dif])
         output.extend(cuisine)
     shuffle(output)
-    with open('../data/balanced.json', 'w') as fp:
+    with open('../data/train_balanced.json', 'w') as fp:
         json.dump(output, fp)
