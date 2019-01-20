@@ -57,7 +57,7 @@ y_test = []
 print("Loading Data...")
 
 #prepare data for model
-with open('../data/train_balanced.json') as dataJSON:
+with open('../data/train.json') as dataJSON:
     data = json.load(dataJSON)
     shuffle(data)
     recipes = [recipe['ingredients'] for recipe in data]
